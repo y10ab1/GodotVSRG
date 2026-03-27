@@ -13,11 +13,11 @@ var spawned_notes = []
 
 var audio = null
 var clap = null
-var hitsound =  null
+var hitsound = null
 
 var time
 var t_song_zero
-var spawn_distance = 500000
+var spawn_distance = 1500000
 var t_begin = 0
 var t_delay = 0
 var alreadyplayed = false
@@ -36,9 +36,18 @@ var bpm = -1
 
 var chart = null
 
+var song_dir = "res://song/"
+var chart_file = "chart.osu"
+
 func _ready():
+	Global.reset_gameplay()
 	Global.composer = self
 	Global.worst_hit = 0
+	
+	if Global.has_meta("current_song_dir"):
+		song_dir = Global.get_meta("current_song_dir")
+	if Global.has_meta("current_chart_file"):
+		chart_file = Global.get_meta("current_chart_file")
 	
 	t_song_zero = Time.get_ticks_usec()+(3*usec)
 	
@@ -55,14 +64,43 @@ func _ready():
 	clap = get_node("../clap")
 	hitsound = get_node("../hitsound")
 	
+	var hit_fx = get_node_or_null("../HitEffects")
+	if hit_fx:
+		Global.hit_effects = hit_fx
+	
+	var chart_path = song_dir + chart_file
+	if not FileAccess.file_exists(chart_path):
+		push_error("Chart file not found: " + chart_path)
+		get_tree().change_scene_to_file("res://scenes/song_select.tscn")
+		return
+	
 	chart = Chart.new()
-	chart.load_chart("res://song/", "chart.osu")
+	chart.load_chart(song_dir, chart_file)
+	
+	var audio_path = song_dir + chart.audiofilename.strip_edges()
+	if FileAccess.file_exists(audio_path):
+		if audio_path.ends_with(".mp3"):
+			var mp3 = AudioStreamMP3.new()
+			mp3.data = FileAccess.get_file_as_bytes(audio_path)
+			audio.stream = mp3
+		elif audio_path.ends_with(".ogg"):
+			var ogg = AudioStreamOggVorbis.load_from_file(audio_path)
+			audio.stream = ogg
+	else:
+		push_warning("Audio file not found: " + audio_path)
+	
+	var clap_snd = load("res://sounds/clap.ogg")
+	if clap_snd:
+		clap.stream = clap_snd
+		hitsound.stream = clap_snd
 	
 	Global.results.reset()
 	Global.results.song_start = Time.get_ticks_usec()
-	Global.results.song_start = Time.get_ticks_usec()+chart.duration
+	Global.results.song_end = Time.get_ticks_usec() + chart.duration
 				
-func _process(delta):
+func _process(_delta):
+	if chart == null:
+		return
 	time = Global.song_time()
 	
 	Global.SetProgress(time/chart.duration)
@@ -73,22 +111,21 @@ func _process(delta):
 		Global.results.song_start = Global.song_time()
 		Global.results.song_end   = Global.song_time()+chart.duration
 		
-		t_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
-		audio.play(0)
+		t_delay = (AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()) * 1000000.0
+		if audio.stream:
+			audio.play(0)
 		alreadyplayed = true
 	
 	check_to_spawn_notes()
 	check_to_despawn_notes()
 	check_to_play_clap()
 	
-	if song_failed and Global.user_settings.immediate_fail: #normally you'd just return to song select or a retry menu but...
+	if song_failed and Global.user_settings.immediate_fail:
 		get_tree().change_scene_to_file("res://scenes/eval.tscn")
 		
 	if time > chart.duration:
-		#fade out audio
 		audio.volume_db = -20 - ((time-chart.duration)*15)/float(usec)
 		
-		#transition to next (eval) scene
 		if time > chart.duration + usec*2.5:
 			get_tree().change_scene_to_file("res://scenes/eval.tscn")
 			
@@ -113,19 +150,19 @@ func check_to_spawn_notes():
 			check = cf != null
 			
 func spawn_note(noteinfo):
-	var note = NoteObject.new() #this should be pooled but dont at me
+	var note = NoteObject.new()
 	note.texture = preload("res://sprites/note.png")
 	note.texture_filter = note.TEXTURE_FILTER_NEAREST
 	
 	note.material = n_mat;
 	
-	note.scale = Vector2(2,2)
+	note.scale = Vector2(5, 2)
 	note.c = noteinfo.c
 	note.t = noteinfo.t
 	note.t2 = noteinfo.t2
 	note.h = noteinfo.h
 	
-	note.r_pos = Vector2(-144+noteinfo.c*96,300)
+	note.r_pos = Vector2(-270 + noteinfo.c * 180, 500)
 	
 	spawned_notes[note.c].append(note)
 	

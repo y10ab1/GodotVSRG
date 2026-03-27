@@ -14,6 +14,7 @@ var receptor_con
 var nps
 var toastie
 var hp
+var hit_effects
 
 var health = 256
 var MAX_HP = 256
@@ -22,6 +23,19 @@ var worst_hit = 0
 
 var user_settings = UserSettings.new()
 var results = Results.new()
+
+func _ready():
+	user_settings.load_settings()
+
+func reset_gameplay():
+	health = MAX_HP
+	worst_hit = 0
+	jCount = [0,0,0,0,0,0]
+	total_notes = 0
+	current_mean = 0
+	cached_sv_time = -1
+	cached_sv_at = -1
+	hit_effects = null
 
 var break_spr = [null,null,null,null]
 
@@ -89,7 +103,8 @@ var cached_sv_at = -1
 var HOLD_LIFE = .5
 
 func set_title(t):
-	title.update_title(t)
+	if title:
+		title.update_title(t)
 
 func set_combo(c):
 	combo.update_combo(c)
@@ -97,14 +112,14 @@ func set_combo(c):
 func get_sv_time(t):
 	if user_settings.cmod:
 		return t*user_settings.scroll_speed
-	return composer.get_adjusted_time(t)*user_settings.scroll_speed
+	return composer.chart.get_adjusted_time(t)*user_settings.scroll_speed
 
 func get_song_sv_time():
 	if user_settings.cmod:
 		return song_time()*user_settings.scroll_speed
 	if cached_sv_at != Time.get_ticks_usec():
 		cached_sv_at = Time.get_ticks_usec()
-		cached_sv_time = composer.get_adjusted_time(song_time(), true)*user_settings.scroll_speed
+		cached_sv_time = composer.chart.get_adjusted_time(song_time(), true)*user_settings.scroll_speed
 	return cached_sv_time
 
 func song_time():
@@ -117,7 +132,8 @@ func window_from_offset(offset):
 	return 5
 
 func SetProgress(percent):
-	progressbar.SetProgress(percent)
+	if progressbar:
+		progressbar.SetProgress(percent)
 
 func add_nps_note(t):
 	if !user_settings.nps:
@@ -143,6 +159,15 @@ func DoJudge(j, column):
 		j = 5
 	if j >= user_settings.hide_judgements_below:
 		judge.judge(j)
+	
+	if hit_effects and j < 5:
+		var receptor_x = -270 + column * 180
+		var receptor_y = 500 if not user_settings.reverse_scroll else -500
+		var particle_count = [20, 16, 12, 8, 4][mini(j, 4)]
+		hit_effects.spawn_hit_particles(Vector2(receptor_x, receptor_y), colors[j], particle_count)
+		var shake_amount = [3.0, 2.0, 1.0, 0.0, 0.0][mini(j, 4)]
+		if shake_amount > 0:
+			hit_effects.trigger_camera_shake(shake_amount)
 		
 	if j > worst_hit:
 		worst_hit = j
@@ -201,36 +226,36 @@ func werwerwerwerf(x):
 
 	return s * y;
 	
-func WifeAccToGrade(acc):
-	if acc >= 99.9935:
+func WifeAccToGrade(wife_acc):
+	if wife_acc >= 99.9935:
 		return "AAAAA"
-	if acc >= 99.980:
+	if wife_acc >= 99.980:
 		return "AAAA:"
-	if acc >= 99.970:
+	if wife_acc >= 99.970:
 		return "AAAA."
-	if acc >= 99.955:
+	if wife_acc >= 99.955:
 		return "AAAA"
-	if acc >= 99.90:
+	if wife_acc >= 99.90:
 		return "AAA:"
-	if acc >= 99.80:
+	if wife_acc >= 99.80:
 		return "AAA,"
-	if acc >= 99.70:
+	if wife_acc >= 99.70:
 		return "AAA"
-	if acc >= 99.00:
+	if wife_acc >= 99.00:
 		return "AA:"
-	if acc >= 96.50:
+	if wife_acc >= 96.50:
 		return "AA."
-	if acc >= 93.00:
+	if wife_acc >= 93.00:
 		return "AA"
-	if acc >= 90.00:
+	if wife_acc >= 90.00:
 		return "A:"
-	if acc >= 85.00:
+	if wife_acc >= 85.00:
 		return "A."
-	if acc >= 80.00:
+	if wife_acc >= 80.00:
 		return "A"
-	if acc >= 70.00:
+	if wife_acc >= 70.00:
 		return "B"
-	if acc >= 60.00:
+	if wife_acc >= 60.00:
 		return "C"
 	return "D"
 

@@ -16,13 +16,11 @@ var avg = 0
 func _ready():
 	Global.hiterror = self
 	
-	image = Image.new()
-	image.create(360,1, false,Image.FORMAT_RGBA8)
+	image = Image.create_empty(360, 1, false, Image.FORMAT_RGBA8)
 	
 	for x in range(360):
 		image.set_pixel(x,0,Color(0,0,0,0))
 	
-	image_texture = ImageTexture.new()
 	image_texture = ImageTexture.create_from_image(image)
 	texture = image_texture
 
@@ -37,16 +35,16 @@ func p50():
 		var c = image.get_pixel(x,0)
 		c.a -= 0.025
 		image.set_pixel(x,0,c)
-	image_texture.update(image)
+	image_texture.set_image(image)
 	texture = image_texture
 
-func add_pixel(color, offset):
+func add_pixel(color, hit_offset):
 	
-	if offset < 180:
+	if hit_offset < 180:
 		if len(hitaverage) < 100:
-			hitaverage.append(offset)
+			hitaverage.append(hit_offset)
 		else:
-			hitaverage[hitaverageindex] = offset
+			hitaverage[hitaverageindex] = hit_offset
 			hitaverageindex += 1
 			hitaverageindex %= 100
 			
@@ -56,7 +54,7 @@ func add_pixel(color, offset):
 		avg /= len(hitaverage)
 		avg_sprite.position.x = avg
 	
-	if offset>=180:
-		offset = 179
-	image.set_pixel(180+offset,0,color)
+	if hit_offset >= 180:
+		hit_offset = 179
+	image.set_pixel(180 + hit_offset, 0, color)
 

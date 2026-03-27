@@ -1,6 +1,6 @@
 extends Node2D
 
-var y_pos = 300
+var y_pos = 500
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

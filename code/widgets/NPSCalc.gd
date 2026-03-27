@@ -36,8 +36,7 @@ func _ready():
 	if !Global.user_settings.nps:
 		queue_free()
 	
-	image = Image.new()
-	image.create(detail,64, false,Image.FORMAT_RGBA8)
+	image = Image.create_empty(detail, 64, false, Image.FORMAT_RGBA8)
 	
 	for x in range(detail):
 		image.set_pixel(x,0,Color(0,0,0,1))
@@ -55,7 +54,7 @@ func update_graph():
 	var cnps = current_nps()
 	image.set_pixel(0,0, Color(image.get_pixel(0,0).r, floor(cnps/10)/9.0, (int(cnps)%10)/9.0, 0));
 	
-	image_texture.update(image)
+	image_texture.set_image(image)
 	texture = image_texture
 
 func _process(delta):

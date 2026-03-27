@@ -10,19 +10,17 @@ var size_3 = [0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 var s3_index = 0
 
 func _ready():
-	#load user settings here for this
 	if !Global.user_settings.shockwaves:
 		queue_free()
 	
 	material.set_shader_parameter("force", Global.user_settings.shockwave_force)
 	material.set_shader_parameter("feather", Global.user_settings.shockwave_feather)
-	var ypos = 60 if Global.user_settings.reverse_scroll else 660
-	material.set_shader_parameter("center_0", Vector2(384,ypos) )
-	material.set_shader_parameter("center_1", Vector2(554,ypos) )
-	material.set_shader_parameter("center_2", Vector2(724,ypos) )
-	material.set_shader_parameter("center_3", Vector2(896,ypos) )
+	var ypos = 140 if Global.user_settings.reverse_scroll else 1140
+	material.set_shader_parameter("center_0", Vector2(90, ypos))
+	material.set_shader_parameter("center_1", Vector2(270, ypos))
+	material.set_shader_parameter("center_2", Vector2(450, ypos))
+	material.set_shader_parameter("center_3", Vector2(630, ypos))
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for x in range(16):
 		if size_0[x] > 0: size_0[x] += delta*5

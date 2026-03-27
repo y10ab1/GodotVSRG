@@ -1,0 +1,123 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://code/ui/MainMenu.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://n5aay2rkpcff" path="res://sprites/bg.png" id="2_bg"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(0.15, 0.12, 0.2, 1)
+
+[node name="TopGlow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+color = Color(0.3, 0.15, 0.5, 0.15)
+
+[node name="CenterPanel" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -280.0
+offset_right = 240.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopSpace" type="Control" parent="CenterPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+
+[node name="Title" type="Label" parent="CenterPanel"]
+layout_mode = 2
+text = "VSRG"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 96
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="AccentLine" type="ColorRect" parent="CenterPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 3)
+size_flags_horizontal = 4
+color = Color(0.6, 0.4, 1.0, 0.8)
+
+[node name="Spacer1" type="Control" parent="CenterPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="Subtitle" type="Label" parent="CenterPanel"]
+layout_mode = 2
+text = "Vertical Scrolling Rhythm Game"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.55, 0.45, 0.65, 1)
+
+[node name="Spacer2" type="Control" parent="CenterPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+
+[node name="ButtonBox" type="VBoxContainer" parent="CenterPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlayBtn" type="Button" parent="CenterPanel/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 64)
+text = "PLAY"
+theme_override_font_sizes/font_size = 28
+
+[node name="SettingsBtn" type="Button" parent="CenterPanel/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 52)
+text = "SETTINGS"
+theme_override_font_sizes/font_size = 20
+
+[node name="QuitBtn" type="Button" parent="CenterPanel/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 52)
+text = "QUIT"
+theme_override_font_sizes/font_size = 20
+
+[node name="BottomLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -40.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Keys: D F J K"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.4, 0.35, 0.5, 0.6)
+
+[connection signal="pressed" from="CenterPanel/ButtonBox/PlayBtn" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterPanel/ButtonBox/SettingsBtn" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterPanel/ButtonBox/QuitBtn" to="." method="_on_quit_pressed"]

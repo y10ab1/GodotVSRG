@@ -38,12 +38,16 @@ func update_combo(c):
 	
 	if prev_digits != digits:
 		t = 0
+		var is_milestone = combo > 0 and combo % 50 == 0
 		for x in range( max(len(digits), len(prev_digits)) ):
 			if x < len(digits) and x < len(prev_digits):
 				if digits[x] != prev_digits[x]:
 					sprites[x].t = 0 
 			else:
 				sprites[x].t = 0 
+		
+		if is_milestone and Global.hit_effects:
+			Global.hit_effects.trigger_camera_shake(4.0)
 	
 	
 func update_sprites():

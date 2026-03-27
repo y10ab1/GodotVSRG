@@ -6,14 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dhegt1pvb5r0i" path="res://sprites/black.png" id="4_mga1b"]
 
 [sub_resource type="Shader" id="Shader_e6p1o"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.0.beta2's CanvasItemMaterial.
-
-shader_type canvas_item;
+code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform vec2 uv_scale;
 uniform vec2 uv_speed;
-
 uniform vec4 tint : source_color;
 
 void vertex(){
@@ -26,14 +23,12 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8tfhr"]
 shader = SubResource("Shader_e6p1o")
-shader_parameter/tint = Color(0.501961, 0.501961, 0.501961, 1)
-shader_parameter/uv_scale = Vector2(20, 11.25)
-shader_parameter/uv_speed = Vector2(-0.6, -0.6)
+shader_parameter/tint = Color(0.25, 0.2, 0.3, 1)
+shader_parameter/uv_scale = Vector2(11.25, 20)
+shader_parameter/uv_speed = Vector2(-0.3, -0.4)
 
 [sub_resource type="Shader" id="Shader_iu5pb"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.0.beta2's CanvasItemMaterial.
-
-shader_type canvas_item;
+code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform sampler2D bg : hint_default_white, filter_nearest;
@@ -56,11 +51,14 @@ gradient = SubResource("Gradient_cbxn3")
 
 [node name="Node2d" type="Node2D"]
 
+[node name="Camera2d" type="Camera2D" parent="."]
+current = true
+
 [node name="bg" type="Sprite2D" parent="."]
 texture_filter = 2
 texture_repeat = 2
 material = SubResource("ShaderMaterial_8tfhr")
-scale = Vector2(20, 11.25)
+scale = Vector2(11.25, 20)
 texture = ExtResource("1_pvt44")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
@@ -70,90 +68,77 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -640.0
-offset_top = -360.0
-offset_right = 640.0
-offset_bottom = 360.0
+offset_left = -360.0
+offset_top = -640.0
+offset_right = 360.0
+offset_bottom = 640.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="songtitle" type="RichTextLabel" parent="ui"]
 clip_contents = false
-offset_left = 528.0
-offset_top = 106.0
-offset_right = 1248.0
-offset_bottom = 328.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 680.0
+offset_bottom = 180.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/normal_font_size = 72
+theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 text = "[center][color=#fff]<Title>
-[font_size=32]<artist>[/font_size][/color][/center]"
+[font_size=24]<artist>[/font_size][/color][/center]"
 scroll_active = false
 autowrap_mode = 0
 
 [node name="grade" type="RichTextLabel" parent="ui"]
 clip_contents = false
-offset_left = 32.0
-offset_top = 32.0
-offset_right = 512.0
-offset_bottom = 328.0
+offset_left = 40.0
+offset_top = 200.0
+offset_right = 680.0
+offset_bottom = 400.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/normal_font_size = 144
+theme_override_font_sizes/normal_font_size = 120
 bbcode_enabled = true
 text = "[center][color=#8aebf1]AAA[/color][/center]"
 
 [node name="acc" type="RichTextLabel" parent="ui"]
 clip_contents = false
-offset_left = 32.0
-offset_top = 187.0
-offset_right = 512.0
-offset_bottom = 328.0
+offset_left = 40.0
+offset_top = 380.0
+offset_right = 680.0
+offset_bottom = 440.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/normal_font_size = 72
+theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 text = "[center][color=#fff]100%[/color][/center]"
 
-[node name="Graph" type="TextureRect" parent="ui"]
-material = SubResource("ShaderMaterial_fvdrw")
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -752.0
-offset_top = -392.0
-offset_right = -32.0
-offset_bottom = -32.0
-grow_horizontal = 0
-grow_vertical = 0
-texture = SubResource("GradientTexture1D_ofxqt")
-
 [node name="count_bg" type="TextureRect" parent="ui"]
-self_modulate = Color(1, 1, 1, 0.501961)
-offset_left = 32.0
-offset_top = 328.0
-offset_right = 512.0
-offset_bottom = 688.0
+self_modulate = Color(1, 1, 1, 0.35)
+offset_left = 40.0
+offset_top = 470.0
+offset_right = 680.0
+offset_bottom = 730.0
 texture = ExtResource("4_mga1b")
 
 [node name="counts" type="RichTextLabel" parent="ui/count_bg"]
 clip_contents = false
-offset_right = 464.0
-offset_bottom = 358.0
+offset_left = 320.0
+offset_top = 10.0
+offset_right = 620.0
+offset_bottom = 256.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 2
-theme_override_font_sizes/normal_font_size = 36
+theme_override_font_sizes/normal_font_size = 28
 bbcode_enabled = true
 text = "[right]0
 0
@@ -165,28 +150,64 @@ text = "[right]0
 
 [node name="counts_labels" type="RichTextLabel" parent="ui/count_bg"]
 clip_contents = false
-offset_left = 16.0
-offset_right = 511.0
-offset_bottom = 358.0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 256.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/normal_font_size = 36
+theme_override_font_sizes/normal_font_size = 28
 bbcode_enabled = true
-text = "[left][color=#8aebf1]MA [/color] 
-[color=#f4b41b]PF[/color]
-[color=#b6d53c]GR[/color]
-[color=#3978a8]GD[/color]
-[color=#8e478c]BD[/color]
-[color=#e6482e]MS[/color]
+text = "[left][color=#8aebf1]MARVELOUS[/color] 
+[color=#f4b41b]PERFECT[/color]
+[color=#b6d53c]GREAT[/color]
+[color=#3978a8]GOOD[/color]
+[color=#8e478c]BAD[/color]
+[color=#e6482e]MISS[/color]
 OK
 [/left]"
 
+[node name="Graph" type="TextureRect" parent="ui"]
+material = SubResource("ShaderMaterial_fvdrw")
+offset_left = 40.0
+offset_top = 760.0
+offset_right = 680.0
+offset_bottom = 1120.0
+texture = SubResource("GradientTexture1D_ofxqt")
+
+[node name="Buttons" type="HBoxContainer" parent="ui"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -80.0
+offset_right = 280.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RetryBtn" type="Button" parent="ui/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 56)
+text = "RETRY"
+theme_override_font_sizes/font_size = 22
+
+[node name="BackBtn" type="Button" parent="ui/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 56)
+text = "SONG SELECT"
+theme_override_font_sizes/font_size = 22
+
 [node name="EvalManager" type="Node2D" parent="."]
-position = Vector2(-0.999947, 0.499991)
-scale = Vector2(20, 11.25)
 script = ExtResource("2_5d456")
 
-[node name="Camera2d" type="Camera2D" parent="."]
-current = true
+[connection signal="pressed" from="ui/Buttons/RetryBtn" to="EvalManager" method="_on_retry_pressed"]
+[connection signal="pressed" from="ui/Buttons/BackBtn" to="EvalManager" method="_on_back_pressed"]
